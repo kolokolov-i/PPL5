@@ -16,7 +16,7 @@ private:
 public:
 	void put(Message* data) {
 		WaitForSingleObject(semFree, INFINITE);
-		buffer = data;
+		data->writeTo(buffer);
 		ReleaseSemaphore(semEmpty, 1, NULL);
 	}
 	Message* get() {
@@ -25,6 +25,13 @@ public:
 		pMessage = new Message(buffer);
 		ReleaseSemaphore(semFree, 1, NULL);
 		return pMessage;
+	}
+	Message* get(int timeout) {
+		Message* pMessage;
+		BOOL r = WaitForSingleObject(semEmpty, timeout);
+		pMessage = new Message(buffer);
+		ReleaseSemaphore(semFree, 1, NULL);
+		return r == FALSE ? pMessage : nullptr;
 	}
 	Channel(std::string name) {
 		std::string chName = "ch" + name;

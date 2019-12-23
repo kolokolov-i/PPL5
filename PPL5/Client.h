@@ -1,7 +1,6 @@
 #pragma once
 
 #include "BaseWorker.h"
-#include "Actor.h"
 #include "Channel.h"
 
 #include <fstream>
@@ -19,6 +18,7 @@ public:
 	Client() : BaseWorker() {
 		out = ofstream("log/client.log", ofstream::out);
 		out << "instance created" << endl;
+		out.close();
 	}
 
 	virtual void start() {

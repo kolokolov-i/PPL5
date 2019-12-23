@@ -47,10 +47,10 @@
     <ClInclude Include="Client.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Actor.h">
+    <ClInclude Include="Developer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Developer.h">
+    <ClInclude Include="Code.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

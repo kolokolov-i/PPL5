@@ -6,14 +6,16 @@
 
 int main()
 {
-	HANDLE hClient;
-	HANDLE hDeveloper;
 	Client* client = new Client();
 	Developer* developer = new Developer();
+
+	Channel* chToDeveloper = new Channel("ToDeveloper");
+	Channel* chToClient = new Channel("ToClient");
+	Channel* chToOperator = new Channel("ToOperator");
+
 	client->start();
 	developer->start();
-	hClient = client->getThreadHandle();
-	hDeveloper = developer->getThreadHandle();
-	WaitForSingleObject(hClient, INFINITE);
-	WaitForSingleObject(hDeveloper, INFINITE);
+
+	WaitForSingleObject(client->getThreadHandle(), INFINITE);
+	WaitForSingleObject(developer->getThreadHandle(), INFINITE);
 }

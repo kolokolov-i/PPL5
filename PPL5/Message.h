@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Actor.h"
-
 #include <string>
 #include <cstring>
 
@@ -12,13 +10,13 @@ public:
 	int code;
 	std::string data;
 
-	Message(Actor pSender, int pCode, std::string pData) {
+	Message(int pSender, int pCode, std::string pData) {
 		sender = pSender;
 		code = pCode;
 		data = pData;
 	}
 	Message(void* buffer) {
-		char* p = static_cast<char*>(buffer);
+		char* p = reinterpret_cast<char*>(buffer);
 		std::memcpy(&sender, p, sizeof(int));
 		p += sizeof(int);
 		std::memcpy(&code, p, sizeof(int));
@@ -26,10 +24,9 @@ public:
 		int len;
 		std::memcpy(&len, p, sizeof(int));
 		p += sizeof(int);
-		char* adata = new char[len+1];
-		std::memcpy(adata, p, len + 1);
+		char* adata = new char[len];
+		std::memcpy(adata, p, len);
 		data = std::string(adata);
-		delete[] adata;
 	}
 	~Message() {}
 	void writeTo(void* buffer) {
@@ -38,7 +35,8 @@ public:
 		memcpy(p, &code, sizeof(int)); p += sizeof(int);
 		int len = data.length();
 		memcpy(p, &len, sizeof(int)); p += sizeof(int);
-		strcpy(p, data.c_str());
+		const char* adata = data.c_str();
+		memcpy(p, adata, len);
 	}
 };
 

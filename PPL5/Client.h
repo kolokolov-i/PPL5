@@ -5,7 +5,6 @@
 
 #include <fstream>
 #include <Windows.h>
-#include <cstdlib>
 
 using namespace std;
 
@@ -17,7 +16,7 @@ class Client :
 public:
 	Client() : BaseWorker() {
 		out = ofstream("log/client.log", ofstream::out);
-		out << "создан клиент" << endl;
+		out << "пришел клиент" << endl;
 	}
 
 	virtual void start() {

@@ -5,7 +5,6 @@
 
 #include <fstream>
 #include <Windows.h>
-#include <cstdlib>
 
 using namespace std;
 
@@ -17,7 +16,7 @@ class Developer :
 public:
 	Developer() : BaseWorker() {
 		out = ofstream("log/developer.log", ofstream::out);
-		out << "создан инженер" << endl;
+		out << "пришел инженер" << endl;
 	}
 
 	virtual void start() {

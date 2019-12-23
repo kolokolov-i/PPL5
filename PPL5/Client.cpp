@@ -1,18 +1,19 @@
 #include "Client.h"
 #include "Code.h"
+#include <cstdlib>
 
 #define ORDER_COUNT 10
 
 string generateOrder();
 
 DWORD WINAPI ClientThreadProc(PVOID p) {
-	Channel* chToDeveloper = new Channel(L"ToDeveloper");
 	Channel* chToClient = new Channel(L"ToClient");
+	Channel* chToDeveloper = new Channel(L"ToDeveloper");
 	ofstream out = ofstream("log/client.log", ofstream::out);
 	srand(0);
 	for (int i = 0; i < ORDER_COUNT; i++) {
 		string order = generateOrder();
-		Message* newOrder = new Message(Code::Client, Code::CODE_NEW, order);
+		Message* newOrder = new Message(Code::Client, Code::STATE_NEW, order);
 		chToDeveloper->put(newOrder);
 		out << "клиент сделал заказ: " << order << endl;
 		out << "клиент ждет ..." << endl;
@@ -24,17 +25,17 @@ DWORD WINAPI ClientThreadProc(PVOID p) {
 		switch (msg->sender) {
 		case Code::Developer:
 			switch (msg->code) {
-			case Code::CODE_ACCEPT:
-				out << "инженер принял заказ: " << msg->data << endl;
+			case Code::STATE_ACCEPT:
+				out << "пришло подтверждение заказа: " << msg->data << endl;
 				break;
-			case Code::CODE_REJECT:
-				out << "инженер отклонил заказ: " << msg->data << endl;
+			case Code::STATE_REJECT:
+				out << "пришел отказ заказа: " << msg->data << endl;
 				break;
 			}
 			break;
-		case Code::Operator:
-			if (msg->code == Code::CODE_SUCCESS) {
-				out << "клиенту принесли готовый заказ: " << msg->data << endl;
+		case Code::Manager:
+			if (msg->code == Code::STATE_SUCCESS) {
+				out << "клиент получил готовый заказ: " << msg->data << endl;
 				// todo check for correct result
 			}
 			break;

@@ -4,7 +4,7 @@
 DWORD WINAPI DeveloperThreadProc(PVOID p) {
 	Channel* chToDeveloper = new Channel(L"ToDeveloper");
 	Channel* chToClient = new Channel(L"ToClient");
-	Channel* chToOperator = new Channel(L"ToOperator");
+	Channel* chToManager = new Channel(L"ToManager");
 	ofstream out = ofstream("log/developer.log", ofstream::out);
 	bool flag = true;
 	while (flag) {
@@ -17,23 +17,23 @@ DWORD WINAPI DeveloperThreadProc(PVOID p) {
 		string order;
 		order = msg->data;
 		out << "инженер получил заказ: " << order << endl;
-		if (order.size() > 50) {
+		if (order.size() > 40) {
 			out << "заказ отклонен, слишком большая деталь: " << order << endl;
-			chToClient->put(new Message(Code::Developer, Code::CODE_REJECT, order));
+			chToClient->put(new Message(Code::Developer, Code::STATE_REJECT, order));
 		}
 		else {
 			out << "заказ принят: " << order << endl;
 			out << "инженер проектирует деталь" << endl;
 			Sleep(10);
-			chToClient->put(new Message(Code::Developer, Code::CODE_ACCEPT, order));
-			//chToOperator->put(new Message(Code::Developer, Code::CODE_DEVELOPED, order));
-			out << "заказ передан оператору" << endl;
+			chToClient->put(new Message(Code::Developer, Code::STATE_ACCEPT, order));
+			chToManager->put(new Message(Code::Developer, Code::STATE_DEVELOPED, order));
+			out << "заказ передан менеджеру" << endl;
 		}
 	}
 	out << "инженер ушел" << endl;
 	out.close();
 	delete chToDeveloper;
 	delete chToClient;
-	delete chToOperator;
+	delete chToManager;
 	return 0;
 }

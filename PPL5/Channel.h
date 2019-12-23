@@ -54,10 +54,6 @@ public:
 				PAGE_READWRITE,
 				0, 4096,
 				(LPCWSTR)fileName.c_str());
-			if (fileMem == NULL) {
-				DWORD debugCode = GetLastError();
-				std::cerr << "error: create file mapping" << std::endl;
-			}
 		}
 		if (fileMem != NULL) {
 			buffer = MapViewOfFile(fileMem, FILE_MAP_ALL_ACCESS, 0, 0, 4096);

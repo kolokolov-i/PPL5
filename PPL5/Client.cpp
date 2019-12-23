@@ -1,6 +1,7 @@
 #include "Client.h"
 #include "Code.h"
 #include <cstdlib>
+//#include <ctime>
 
 #define ORDER_COUNT 10
 
@@ -10,6 +11,8 @@ DWORD WINAPI ClientThreadProc(PVOID p) {
 	Channel* chToClient = new Channel(L"ToClient");
 	Channel* chToDeveloper = new Channel(L"ToDeveloper");
 	ofstream out = ofstream("log/client.log", ofstream::out);
+	//time_t timeStart, timeEnd;
+	//time(&timeStart);
 	srand(0);
 	for (int i = 0; i < ORDER_COUNT; i++) {
 		string order = generateOrder();

@@ -33,7 +33,6 @@ DWORD WINAPI ManagerThreadProc(PVOID p) {
 				chToServer->put(new Message(Code::Manager, Code::STATE_DEVELOPED, msg->data));
 			}
 		}
-
 	}
 	out << "менеджер ушел" << endl;
 	out.close();

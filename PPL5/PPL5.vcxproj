@@ -159,6 +159,7 @@
     <ClCompile Include="Message.cpp" />
     <ClCompile Include="Manager.cpp" />
     <ClCompile Include="PPL5.cpp" />
+    <ClCompile Include="Server.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code.h" />
@@ -168,6 +169,7 @@
     <ClInclude Include="Developer.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="Manager.h" />
+    <ClInclude Include="Server.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

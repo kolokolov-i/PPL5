@@ -11,7 +11,6 @@ protected:
 
 public:
 	virtual void start() = 0;
-	//virtual void stop() = 0;
 
 	HANDLE getThreadHandle() {
 		return hThread;

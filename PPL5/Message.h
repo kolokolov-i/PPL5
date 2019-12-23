@@ -30,10 +30,10 @@ public:
 	}
 	~Message() {}
 	void writeTo(void* buffer) {
-		char* p = static_cast<char*>(buffer);
+		char* p = reinterpret_cast<char*>(buffer);
 		memcpy(p, &sender, sizeof(int)); p += sizeof(int);
 		memcpy(p, &code, sizeof(int)); p += sizeof(int);
-		int len = data.length();
+		int len = data.length() + 1;
 		memcpy(p, &len, sizeof(int)); p += sizeof(int);
 		const char* adata = data.c_str();
 		memcpy(p, adata, len);

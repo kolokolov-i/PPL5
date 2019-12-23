@@ -10,8 +10,9 @@ public:
 		Machine = 5;
 
 	static const int
-		CODE_ACCEPT = 0,
-		CODE_REJECT = 1,
-		CODE_DEVELOPED = 2,
-		CODE_SUCCESS = 3;
+		CODE_NEW = 1,
+		CODE_ACCEPT = 2,
+		CODE_REJECT = 3,
+		CODE_DEVELOPED = 4,
+		CODE_SUCCESS = 5;
 };

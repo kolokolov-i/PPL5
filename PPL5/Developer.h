@@ -17,12 +17,12 @@ class Developer :
 public:
 	Developer() : BaseWorker() {
 		out = ofstream("log/developer.log", ofstream::out);
-		out << "instance created" << endl;
-		out.close();
+		out << "создан инженер" << endl;
 	}
 
 	virtual void start() {
-		out << "starting" << endl;
+		out << "запуск инженера ..." << endl;
+		out.close();
 		hThread = CreateThread(NULL, 0, DeveloperThreadProc, NULL, 0, NULL);
 	}
 

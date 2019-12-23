@@ -3,25 +3,24 @@
 
 #define ORDER_COUNT 10
 
+string generateOrder();
+
 DWORD WINAPI ClientThreadProc(PVOID p) {
-	Channel* chToDeveloper = new Channel("ToDeveloper");
-	Channel* chToClient = new Channel("ToClient");
+	Channel* chToDeveloper = new Channel(L"ToDeveloper");
+	Channel* chToClient = new Channel(L"ToClient");
 	ofstream out = ofstream("log/client.log", ofstream::out);
 	srand(0);
 	for (int i = 0; i < ORDER_COUNT; i++) {
-		char c = 'a' + (rand() % 26);
-		int len = rand() % 60 + 1;
-		char* adata = new char[len+1];
-		for (int j = 0; j < len; j++) {
-			adata[j] = c;
-		}
-		adata[len] = 0;
-		string order(adata);
-		Message* newOrder = new Message(Code::Client, 0, order);
+		string order = generateOrder();
+		Message* newOrder = new Message(Code::Client, Code::CODE_NEW, order);
 		chToDeveloper->put(newOrder);
 		out << "клиент сделал заказ: " << order << endl;
 		out << "клиент ждет ..." << endl;
-		Message* msg = chToClient->get();
+		Message* msg = chToClient->get(15000);
+		if (msg == nullptr) {
+			out << "клиент не дождался" << endl;
+			continue;
+		}
 		switch (msg->sender) {
 		case Code::Developer:
 			switch (msg->code) {
@@ -42,6 +41,20 @@ DWORD WINAPI ClientThreadProc(PVOID p) {
 		}
 		Sleep(100);
 	}
+	out << "клиент ушел" << endl;
 	out.close();
+	delete chToDeveloper;
+	delete chToClient;
 	return 0;
+}
+
+string generateOrder() {
+	char c = 'a' + (rand() % 26);
+	int len = rand() % 60 + 1;
+	char* adata = new char[len + 1];
+	for (int j = 0; j < len; j++) {
+		adata[j] = c;
+	}
+	adata[len] = 0;
+	return string(adata);
 }

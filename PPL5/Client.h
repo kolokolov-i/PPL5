@@ -17,12 +17,12 @@ class Client :
 public:
 	Client() : BaseWorker() {
 		out = ofstream("log/client.log", ofstream::out);
-		out << "instance created" << endl;
-		out.close();
+		out << "создан клиент" << endl;
 	}
 
 	virtual void start() {
-		out << "starting" << endl;
+		out << "запуск клиента ..." << endl;
+		out.close();
 		hThread = CreateThread(NULL, 0, ClientThreadProc, NULL, 0, NULL);
 	}
 

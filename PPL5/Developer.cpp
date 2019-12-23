@@ -2,15 +2,16 @@
 #include "Code.h"
 
 DWORD WINAPI DeveloperThreadProc(PVOID p) {
-	Channel* chToDeveloper = new Channel("ToDeveloper");
-	Channel* chToClient = new Channel("ToClient");
-	Channel* chToOperator = new Channel("ToOperator");
+	Channel* chToDeveloper = new Channel(L"ToDeveloper");
+	Channel* chToClient = new Channel(L"ToClient");
+	Channel* chToOperator = new Channel(L"ToOperator");
 	ofstream out = ofstream("log/developer.log", ofstream::out);
 	bool flag = true;
 	while (flag) {
 		Message* msg = chToDeveloper->get(5000);
 		if (msg == nullptr) {
 			flag = false;
+			out << "инженер не дождался" << endl;
 			continue;
 		}
 		string order;
@@ -25,10 +26,14 @@ DWORD WINAPI DeveloperThreadProc(PVOID p) {
 			out << "инженер проектирует деталь" << endl;
 			Sleep(10);
 			chToClient->put(new Message(Code::Developer, Code::CODE_ACCEPT, order));
-			chToOperator->put(new Message(Code::Developer, Code::CODE_DEVELOPED, order));
+			//chToOperator->put(new Message(Code::Developer, Code::CODE_DEVELOPED, order));
 			out << "заказ передан оператору" << endl;
 		}
 	}
+	out << "инженер ушел" << endl;
 	out.close();
+	delete chToDeveloper;
+	delete chToClient;
+	delete chToOperator;
 	return 0;
 }

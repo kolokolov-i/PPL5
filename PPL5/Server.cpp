@@ -8,16 +8,17 @@ DWORD WINAPI ServerThreadProc(PVOID p) {
 	ofstream out = ofstream("log/server.log", ofstream::out);
 	bool flag = true;
 	while (flag) {
+		std::cout << "server waiting" << endl;
 		Message* msg = chToServer->get(5000);
 		if (msg == nullptr) {
 			flag = false;
-			out << "сервер отключили" << endl;
+			out << "сервер отключился" << endl;
 			continue;
 		}
 		switch (msg->sender) {
 		case Code::Manager:
 			out << "сервер принимает задание: " << msg->data << endl;
-			//chToMachine->put(new Message(Code::Server, Code::STATE_DEVELOPED, msg->data));
+			chToMachine->put(new Message(Code::Server, Code::STATE_DEVELOPED, msg->data));
 			break;
 		case Code::Machine:
 			out << "сервер оповещает менеджера о готовности: " << msg->data << endl;
@@ -26,7 +27,7 @@ DWORD WINAPI ServerThreadProc(PVOID p) {
 		}
 		Sleep(1);
 	}
-	out << "сервер отключили" << endl;
+	out << "сервер остановлен" << endl;
 	out.close();
 	delete chToServer;
 	delete chToManager;

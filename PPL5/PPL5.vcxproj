@@ -156,6 +156,7 @@
     <ClCompile Include="Channel.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Developer.cpp" />
+    <ClCompile Include="Machine.cpp" />
     <ClCompile Include="Message.cpp" />
     <ClCompile Include="Manager.cpp" />
     <ClCompile Include="PPL5.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="Channel.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Developer.h" />
+    <ClInclude Include="Machine.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="Manager.h" />
     <ClInclude Include="Server.h" />

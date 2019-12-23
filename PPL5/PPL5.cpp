@@ -3,6 +3,7 @@
 #include "Developer.h"
 #include "Manager.h"
 #include "Server.h"
+#include "Machine.h"
 #include "Code.h"
 
 #include <iostream>
@@ -13,6 +14,7 @@ int main()
 	Developer* developer = new Developer();
 	Manager* manager = new Manager();
 	Server* server = new Server();
+	Machine* machine = new Machine();
 
 	Channel* chToDeveloper = new Channel(L"ToDeveloper");
 	Channel* chToClient = new Channel(L"ToClient");
@@ -25,6 +27,7 @@ int main()
 	developer->start();
 	manager->start();
 	server->start();
+	machine->start();
 
 	WaitForSingleObject(client->getThreadHandle(), INFINITE);
 	WaitForSingleObject(developer->getThreadHandle(), INFINITE);

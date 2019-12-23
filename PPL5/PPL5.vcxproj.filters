@@ -21,13 +21,16 @@
     <ClCompile Include="BaseWorker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Customer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Channel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Message.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Client.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Developer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,13 +38,19 @@
     <ClInclude Include="BaseWorker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Customer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Channel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Message.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Client.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Developer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

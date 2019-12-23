@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Message.h"
+
 #include <Windows.h>
 #include <string>
 #include <iostream>
@@ -21,12 +22,12 @@ public:
 	Message* get() {
 		Message* pMessage;
 		WaitForSingleObject(semEmpty, INFINITE);
-		pMessage = (Message*)buffer;
+		pMessage = new Message(buffer);
 		ReleaseSemaphore(semFree, 1, NULL);
 		return pMessage;
 	}
-	Channel(const char* name) {
-		std::string chName = "ch" + std::string(name);
+	Channel(std::string name) {
+		std::string chName = "ch" + name;
 		std::string semFName = chName + "semF";
 		std::string semEName = chName + "semE";
 		std::string fileName = chName + "file";
@@ -39,11 +40,21 @@ public:
 			semEmpty = CreateSemaphore(NULL, 1, 1, (LPCWSTR)semEName.c_str());
 		}
 		fileMem = OpenFileMapping(FILE_MAP_ALL_ACCESS, false, (LPCWSTR)fileName.c_str());
+		if (fileMem == NULL) {
+			fileMem = CreateFileMapping(
+				INVALID_HANDLE_VALUE,
+				NULL,
+				PAGE_READWRITE,
+				0, 4096,
+				(LPCWSTR)fileName.c_str());
+		}
 		if (fileMem != NULL) {
 			buffer = MapViewOfFile(fileMem, FILE_MAP_ALL_ACCESS, 0, 0, 4096);
 		}
 		else {
+			DWORD debugCode = GetLastError();
 			std::cerr << "error: FILE_MAP" << std::endl;
+			buffer = nullptr;
 		}
 	}
 	~Channel() {}

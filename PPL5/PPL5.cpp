@@ -1,12 +1,19 @@
-#include "Customer.h"
+#include "Channel.h"
+#include "Client.h"
+#include "Developer.h"
 
 #include <iostream>
-#include <Windows.h>
 
 int main()
 {
-    
-    Customer customer;
-    customer.start();
-    customer.stop();
+	HANDLE hClient;
+	HANDLE hDeveloper;
+	Client* client = new Client();
+	Developer* developer = new Developer();
+	client->start();
+	developer->start();
+	hClient = client->getThreadHandle();
+	hDeveloper = developer->getThreadHandle();
+	WaitForSingleObject(hClient, INFINITE);
+	WaitForSingleObject(hDeveloper, INFINITE);
 }

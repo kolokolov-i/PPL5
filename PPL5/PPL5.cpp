@@ -21,7 +21,6 @@ int main()
 	Channel* chToManager = new Channel(L"ToManager");
 	Channel* chToServer = new Channel(L"ToServer");
 	Channel* chToMachine = new Channel(L"ToMachine");
-	Channel* chForClaim = new Channel(L"ForClaim");
 
 	client->start();
 	developer->start();
@@ -38,5 +37,4 @@ int main()
 	delete chToManager;
 	delete chToServer;
 	delete chToMachine;
-	delete chForClaim;
 }

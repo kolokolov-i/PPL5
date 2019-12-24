@@ -8,7 +8,6 @@ DWORD WINAPI ServerThreadProc(PVOID p) {
 	ofstream out = ofstream("log/server.log", ofstream::out);
 	bool flag = true;
 	while (flag) {
-		std::cout << "server waiting" << endl;
 		Message* msg = chToServer->get(5000);
 		if (msg == nullptr) {
 			flag = false;
@@ -27,6 +26,7 @@ DWORD WINAPI ServerThreadProc(PVOID p) {
 		}
 		Sleep(1);
 	}
+	std::cout << "server exit" << endl;
 	out << "сервер остановлен" << endl;
 	out.close();
 	delete chToServer;

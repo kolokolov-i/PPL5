@@ -11,7 +11,7 @@ DWORD WINAPI MachineThreadProc(PVOID p) {
 		Message* msg = chToMachine->get(5000);
 		if (msg == nullptr) {
 			flag = false;
-			out << "станок остаавливается" << endl;
+			out << "станок останавливается" << endl;
 			continue;
 		}
 		if (msg->sender == Code::Server) {
@@ -21,14 +21,15 @@ DWORD WINAPI MachineThreadProc(PVOID p) {
 			char dif = 'a' - 'A';
 			for (int i = 0; src[i] != '\0'; i++) {
 				int v = rand() % 100;
-				res[i] = src[i] + (v > 90 ? 0 : 32);
+				res[i] = src[i] - (v > 95 ? 0 : dif);
 			}
 			res[len] = '\0';
 			chToServer->put(new Message(Code::Machine, Code::STATE_SUCCESS, std::string(res)));
-			out << "заказ выполнен" << endl;
+			out << "заказ выполнен: " << res << endl;
 		}
 		Sleep(10);
 	}
+	std::cout << "machine exit" << endl;
 	out << "станок остановлен" << endl;
 	out.close();
 	delete chToMachine;

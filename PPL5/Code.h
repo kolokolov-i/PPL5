@@ -16,5 +16,6 @@ public:
 		STATE_REJECT = 3,
 		STATE_DEVELOPED = 4,
 		STATE_SUCCESS = 5,
-		STATE_CLAIM = 6;
+		REQ_CLAIM = 6,
+		REQ_GET_RESULT = 7;
 };

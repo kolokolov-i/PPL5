@@ -19,6 +19,18 @@ public:
 		data->writeTo(buffer);
 		ReleaseSemaphore(semEmpty, 1, NULL);
 	}
+	bool putT(Message* data, int timeout) {
+		DWORD r = WaitForSingleObject(semFree, timeout);
+		if (r == WAIT_TIMEOUT) {
+			return false;
+		}
+		data->writeTo(buffer);
+		ReleaseSemaphore(semEmpty, 1, NULL);
+	}
+	bool canPut() {
+		DWORD r = WaitForSingleObject(semFree, 0);
+		return r != WAIT_TIMEOUT;
+	}
 	Message* get() {
 		Message* pMessage;
 		WaitForSingleObject(semEmpty, INFINITE);
@@ -28,10 +40,13 @@ public:
 	}
 	Message* get(int timeout) {
 		Message* pMessage;
-		BOOL r = WaitForSingleObject(semEmpty, timeout);
+		DWORD r = WaitForSingleObject(semEmpty, timeout);
+		if (r == WAIT_TIMEOUT) {
+			return nullptr;
+		}
 		pMessage = new Message(buffer);
 		ReleaseSemaphore(semFree, 1, NULL);
-		return r == FALSE ? pMessage : nullptr;
+		return pMessage;
 	}
 	Channel(std::wstring name) {
 		std::wstring chName = L"ch" + name;

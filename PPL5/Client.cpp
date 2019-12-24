@@ -1,7 +1,6 @@
 #include "Client.h"
 #include "Code.h"
 #include <cstdlib>
-//#include <ctime>
 
 #define ORDER_COUNT 10
 
@@ -10,19 +9,29 @@ string generateOrder();
 DWORD WINAPI ClientThreadProc(PVOID p) {
 	Channel* chToClient = new Channel(L"ToClient");
 	Channel* chToDeveloper = new Channel(L"ToDeveloper");
+	Channel* chToManager = new Channel(L"ToManager");
 	ofstream out = ofstream("log/client.log", ofstream::out);
-	//time_t timeStart, timeEnd;
-	//time(&timeStart);
 	srand(0);
-	for (int i = 0; i < ORDER_COUNT; i++) {
-		string order = generateOrder();
-		Message* newOrder = new Message(Code::Client, Code::STATE_NEW, order);
-		chToDeveloper->put(newOrder);
-		out << "клиент сделал заказ: " << order << endl;
-		out << "клиент ждет ..." << endl;
-		Message* msg = chToClient->get(15000);
+	bool flag = true;
+	int orderN = 0;
+	int orderF = 0;
+	while (flag) {
+		if (orderN < ORDER_COUNT) {
+			string order = generateOrder();
+			Message* newOrder = new Message(Code::Client, Code::STATE_NEW, order);
+			chToDeveloper->put(newOrder);
+			orderN++;
+			out << "клиент сделал заказ: " << order << endl;
+		}
+		if (orderF == ORDER_COUNT) {
+			out << "все заказы выполнены" << endl;
+			flag = false;
+			continue;
+		}
+		Message* msg = chToClient->get(5000);
 		if (msg == nullptr) {
 			out << "клиент не дождался" << endl;
+			flag = false;
 			continue;
 		}
 		switch (msg->sender) {
@@ -33,22 +42,30 @@ DWORD WINAPI ClientThreadProc(PVOID p) {
 				break;
 			case Code::STATE_REJECT:
 				out << "пришел отказ заказа: " << msg->data << endl;
+				orderF++;
 				break;
 			}
 			break;
 		case Code::Manager:
 			if (msg->code == Code::STATE_SUCCESS) {
 				out << "клиент получил готовый заказ: " << msg->data << endl;
+				orderF++;
 				// todo check for correct result
 			}
 			break;
 		}
+		if (orderF < ORDER_COUNT) {
+			out << "клиент спрашивает про готовые заказы " << endl;
+			chToManager->put(new Message(Code::Client, Code::REQ_GET_RESULT, ""));
+		}
 		Sleep(100);
 	}
+	std::cout << "client exit" << endl;
 	out << "клиент ушел" << endl;
 	out.close();
 	delete chToDeveloper;
 	delete chToClient;
+	delete chToManager;
 	return 0;
 }
 

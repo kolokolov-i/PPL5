@@ -11,7 +11,7 @@ DWORD WINAPI DeveloperThreadProc(PVOID p) {
 		Message* msg = chToDeveloper->get(5000);
 		if (msg == nullptr) {
 			flag = false;
-			out << "инженер не дождался" << endl;
+			out << "больше обращений нет" << endl;
 			continue;
 		}
 		string order;
@@ -23,13 +23,13 @@ DWORD WINAPI DeveloperThreadProc(PVOID p) {
 		}
 		else {
 			out << "заказ принят: " << order << endl;
-			out << "инженер проектирует деталь" << endl;
 			Sleep(10);
 			chToClient->put(new Message(Code::Developer, Code::STATE_ACCEPT, order));
 			chToManager->put(new Message(Code::Developer, Code::STATE_DEVELOPED, order));
 			out << "заказ передан менеджеру" << endl;
 		}
 	}
+	std::cout << "developer exit" << endl;
 	out << "инженер ушел" << endl;
 	out.close();
 	delete chToDeveloper;

@@ -50,7 +50,6 @@ DWORD WINAPI ClientThreadProc(PVOID p) {
 			if (msg->code == Code::STATE_SUCCESS) {
 				out << "клиент получил готовый заказ: " << msg->data << endl;
 				orderF++;
-				// todo check for correct result
 			}
 			break;
 		}

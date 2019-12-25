@@ -6,7 +6,7 @@ DWORD WINAPI MachineThreadProc(PVOID p) {
 	Channel* chToServer = new Channel(L"ToServer");
 	ofstream out = ofstream("log/machine.log", ofstream::out);
 	bool flag = true;
-	srand(100);
+	//srand(100);
 	while (flag) {
 		Message* msg = chToMachine->get(5000);
 		if (msg == nullptr) {
@@ -20,8 +20,8 @@ DWORD WINAPI MachineThreadProc(PVOID p) {
 			char* res = new char[len+1];
 			char dif = 'a' - 'A';
 			for (int i = 0; src[i] != '\0'; i++) {
-				int v = rand() % 100;
-				res[i] = src[i] - (v > 95 ? 0 : dif);
+				//int v = rand() % 100;
+				res[i] = src[i] - dif;// -(v > 95 ? 0 : dif);
 			}
 			res[len] = '\0';
 			chToServer->put(new Message(Code::Machine, Code::STATE_SUCCESS, std::string(res)));

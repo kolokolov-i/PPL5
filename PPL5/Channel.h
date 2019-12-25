@@ -26,6 +26,7 @@ public:
 		}
 		data->writeTo(buffer);
 		ReleaseSemaphore(semEmpty, 1, NULL);
+		return true;
 	}
 	bool canPut() {
 		DWORD r = WaitForSingleObject(semFree, 0);

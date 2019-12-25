@@ -3,6 +3,8 @@
 
 #include <queue>
 
+string claim(string data);
+
 DWORD WINAPI ManagerThreadProc(PVOID p) {
 	Channel* chToManager = new Channel(L"ToManager");
 	Channel* chToClient = new Channel(L"ToClient");
@@ -11,7 +13,8 @@ DWORD WINAPI ManagerThreadProc(PVOID p) {
 	std::queue<Message*> storehouse;
 	bool flag = true;
 	while (flag) {
-		Message* msg = chToManager->get(5000);
+
+		Message* msg = chToManager->get(10000);
 		if (msg == nullptr) {
 			flag = false;
 			out << "больше обращений нет" << endl;
@@ -40,7 +43,7 @@ DWORD WINAPI ManagerThreadProc(PVOID p) {
 				break;
 			case Code::REQ_CLAIM:
 				out << "пришла жалоба, переделывать: " << msg->data << endl;
-				chToServer->put(new Message(Code::Manager, Code::STATE_DEVELOPED, msg->data));
+				chToServer->put(new Message(Code::Manager, Code::STATE_DEVELOPED, claim(msg->data)));
 				break;
 			}
 			break;
@@ -54,4 +57,15 @@ DWORD WINAPI ManagerThreadProc(PVOID p) {
 	delete chToClient;
 	delete chToServer;
 	return 0;
+}
+
+string claim(string data) {
+	const char* adata = data.c_str();
+	char* ares = new char[data.length()+1];
+	char* r = ares;
+	for (const char *c = adata; *c; c++, r++) {
+		*r = *c + (((*c < 0x61) || (*c > 0x7a)) ? 0x20 : 0);
+	}
+	ares[data.length()] = 0;
+	return string(ares);
 }

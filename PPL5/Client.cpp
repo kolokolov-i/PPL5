@@ -5,6 +5,7 @@
 #define ORDER_COUNT 10
 
 string generateOrder();
+bool checkResult(string data);
 
 DWORD WINAPI ClientThreadProc(PVOID p) {
 	Channel* chToClient = new Channel(L"ToClient");
@@ -28,7 +29,7 @@ DWORD WINAPI ClientThreadProc(PVOID p) {
 			flag = false;
 			continue;
 		}
-		Message* msg = chToClient->get(5000);
+		Message* msg = chToClient->get(10000);
 		if (msg == nullptr) {
 			out << "клиент не дождался" << endl;
 			flag = false;
@@ -49,8 +50,14 @@ DWORD WINAPI ClientThreadProc(PVOID p) {
 		case Code::Manager:
 			if (msg->code == Code::STATE_SUCCESS) {
 				out << "клиент получил готовый заказ: " << msg->data << endl;
-				orderF++;
-				// todo check for correct result
+				if (checkResult(msg->data)) {
+					out << "деталь качественная" << endl;
+					orderF++;
+				}
+				else {
+					out << "деталь дефектная, жалоба" << endl;
+					chToManager->put(new Message(Code::Client, Code::REQ_CLAIM, msg->data));
+				}
 			}
 			break;
 		}
@@ -78,4 +85,15 @@ string generateOrder() {
 	}
 	adata[len] = 0;
 	return string(adata);
+}
+
+bool checkResult(string data) {
+	const char* adata = data.c_str();
+	for (const char *c = adata; *c; c++) {
+		int t = *c;
+		if ((t < 65) || (t > 90)) {
+			return false;
+		}
+	}
+	return true;
 }

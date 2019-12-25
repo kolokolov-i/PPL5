@@ -31,6 +31,8 @@ int main()
 	WaitForSingleObject(client->getThreadHandle(), INFINITE);
 	WaitForSingleObject(developer->getThreadHandle(), INFINITE);
 	WaitForSingleObject(manager->getThreadHandle(), INFINITE);
+	WaitForSingleObject(server->getThreadHandle(), INFINITE);
+	WaitForSingleObject(machine->getThreadHandle(), INFINITE);
 
 	delete chToDeveloper;
 	delete chToClient;

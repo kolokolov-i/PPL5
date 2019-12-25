@@ -8,7 +8,7 @@ DWORD WINAPI DeveloperThreadProc(PVOID p) {
 	ofstream out = ofstream("log/developer.log", ofstream::out);
 	bool flag = true;
 	while (flag) {
-		Message* msg = chToDeveloper->get(5000);
+		Message* msg = chToDeveloper->get(10000);
 		if (msg == nullptr) {
 			flag = false;
 			out << "больше обращений нет" << endl;

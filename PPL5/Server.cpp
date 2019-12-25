@@ -8,7 +8,7 @@ DWORD WINAPI ServerThreadProc(PVOID p) {
 	ofstream out = ofstream("log/server.log", ofstream::out);
 	bool flag = true;
 	while (flag) {
-		Message* msg = chToServer->get(5000);
+		Message* msg = chToServer->get(10000);
 		if (msg == nullptr) {
 			flag = false;
 			out << "сервер отключился" << endl;

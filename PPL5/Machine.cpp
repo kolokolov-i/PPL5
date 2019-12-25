@@ -8,7 +8,7 @@ DWORD WINAPI MachineThreadProc(PVOID p) {
 	bool flag = true;
 	srand(100);
 	while (flag) {
-		Message* msg = chToMachine->get(5000);
+		Message* msg = chToMachine->get(10000);
 		if (msg == nullptr) {
 			flag = false;
 			out << "станок останавливается" << endl;

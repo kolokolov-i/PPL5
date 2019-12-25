@@ -8,7 +8,7 @@ DWORD WINAPI ServerThreadProc(PVOID p) {
 	ofstream out = ofstream("log/server.log", ofstream::out);
 	bool flag = true;
 	while (flag) {
-		Message* msg = chToServer->get(5000);
+		Message* msg = chToServer->get(10000);
 		if (msg == nullptr) {
 			flag = false;
 			out << "сервер отключился" << endl;
@@ -16,8 +16,17 @@ DWORD WINAPI ServerThreadProc(PVOID p) {
 		}
 		switch (msg->sender) {
 		case Code::Manager:
-			out << "сервер принимает задание: " << msg->data << endl;
-			chToMachine->put(new Message(Code::Server, Code::STATE_DEVELOPED, msg->data));
+			switch (msg->code) {
+			case Code::STATE_DEVELOPED: {
+				out << "сервер принимает задание: " << msg->data << endl;
+				chToMachine->put(new Message(Code::Server, Code::STATE_DEVELOPED, msg->data));
+			}break;
+			case Code::MACHINE_OFF: {
+				out << "сервер отключает станок" << endl;
+				chToMachine->put(new Message(Code::Server, Code::MACHINE_OFF, ""));
+				flag = false;
+			}break;
+			}
 			break;
 		case Code::Machine:
 			out << "сервер оповещает менеджера о готовности: " << msg->data << endl;

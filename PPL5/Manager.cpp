@@ -15,6 +15,8 @@ DWORD WINAPI ManagerThreadProc(PVOID p) {
 		if (msg == nullptr) {
 			flag = false;
 			out << "больше обращений нет" << endl;
+			chToServer->put(new Message(Code::Manager, Code::MACHINE_OFF, ""));
+			out << "менеджер отключает станки" << endl;
 			continue;
 		}
 		switch (msg->sender) {
